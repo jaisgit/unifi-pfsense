@@ -4,11 +4,12 @@
 # Installs the Uni-Fi controller software on a FreeBSD machine (presumably running pfSense).
 
 # The latest version of UniFi:
-UNIFI_SOFTWARE_URL="https://dl.ui.com/unifi/7.2.97/UniFi.unix.zip"
-
+# https://ui.com/download/releases/network-server
+VERSION=7.3.83
+UNIFI_SOFTWARE_URL="https://dl.ui.com/unifi/${VERSION}/UniFi.unix.zip"
 
 # The rc script associated with this branch or fork:
-RC_SCRIPT_URL="https://raw.githubusercontent.com/unofficial-unifi/unifi-pfsense/master/rc.d/unifi.sh"
+RC_SCRIPT_URL="https://raw.githubusercontent.com/jaisgit/unifi-pfsense/master/rc.d/unifi.sh"
 
 CURRENT_MONGODB_VERSION=mongodb42
 
@@ -87,11 +88,13 @@ echo " done."
 
 echo "Removing discontinued packages..."
 old_mongos=`pkg info | grep mongodb | grep -v ${CURRENT_MONGODB_VERSION}`
-for old_mongo in "${old_mongos}"; do
-  package=`echo "$old_mongo" | cut -d' ' -f1`
-  pkg unlock -yq ${package}
-  env ASSUME_ALWAYS_YES=YES /usr/sbin/pkg delete ${package}
-done
+if [ ! -z "${old_mongos}" ]; then
+  for old_mongo in "${old_mongos}"; do
+    package=`echo "$old_mongo" | cut -d' ' -f1`
+    pkg unlock -yq ${package}
+    env ASSUME_ALWAYS_YES=YES /usr/sbin/pkg delete ${package}
+  done
+fi
 echo " done."
 
 
@@ -116,10 +119,11 @@ AddPkg () {
   if [ `pkg info | grep -c $pkgname-$pkgvers` -eq 1 ]; then
     echo "Package $pkgname-$pkgvers already installed."
   else
+    echo "Installing package $pkgurl."
     env ASSUME_ALWAYS_YES=YES /usr/sbin/pkg add -f "$pkgurl" || exit 1
 
     # if update openjdk8 then force detele snappyjava to reinstall for new version of openjdk
-    if [ "$pkgname" == "openjdk8" ]; then
+    if [ "$pkgname" == "openjdk11" ]; then
       pkg unlock -yq snappyjava
       env ASSUME_ALWAYS_YES=YES /usr/sbin/pkg delete snappyjava
     fi
@@ -134,7 +138,7 @@ AddPkg freetype2
 AddPkg fontconfig
 AddPkg alsa-lib
 AddPkg mpdecimal
-AddPkg python37
+AddPkg python39
 AddPkg libfontenc
 AddPkg mkfontscale
 AddPkg dejavu
@@ -155,7 +159,19 @@ AddPkg libXrender
 AddPkg libinotify
 AddPkg javavmwrapper
 AddPkg java-zoneinfo
-AddPkg openjdk8
+AddPkg jpeg-turbo
+AddPkg jbigkit
+AddPkg libdeflate
+AddPkg zstd
+AddPkg tiff
+AddPkg lcms2
+AddPkg libXrandr
+AddPkg encodings
+AddPkg font-bh-ttf
+AddPkg font-misc-ethiopic
+AddPkg font-misc-meltho
+AddPkg xorg-fonts-truetype
+AddPkg openjdk11
 AddPkg snappyjava
 AddPkg snappy
 AddPkg cyrus-sasl
