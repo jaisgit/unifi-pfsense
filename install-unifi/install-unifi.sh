@@ -5,7 +5,7 @@
 
 # The latest version of UniFi:
 # https://ui.com/download/releases/network-server
-VERSION=7.4.156
+VERSION=7.4.162
 UNIFI_SOFTWARE_URL="https://dl.ui.com/unifi/${VERSION}/UniFi.unix.zip"
 
 # The rc script associated with this branch or fork:
