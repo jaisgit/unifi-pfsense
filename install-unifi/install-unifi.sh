@@ -4,11 +4,12 @@
 # Installs the Uni-Fi controller software on a FreeBSD machine (presumably running pfSense).
 
 # The latest version of UniFi:
-UNIFI_SOFTWARE_URL="https://dl.ui.com/unifi/7.2.97/UniFi.unix.zip"
-
+# https://ui.com/download/releases/network-server
+VERSION=7.2.97 #7.3.83
+UNIFI_SOFTWARE_URL="https://dl.ui.com/unifi/${VERSION}/UniFi.unix.zip"
 
 # The rc script associated with this branch or fork:
-RC_SCRIPT_URL="https://raw.githubusercontent.com/unofficial-unifi/unifi-pfsense/master/rc.d/unifi.sh"
+RC_SCRIPT_URL="https://raw.githubusercontent.com/jaisgit/unifi-pfsense/master/rc.d/unifi.sh"
 
 CURRENT_MONGODB_VERSION=mongodb42
 
